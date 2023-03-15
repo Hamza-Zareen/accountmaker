@@ -6,12 +6,14 @@ import com.account.accountmaker.repository.CustomerRepository;
 import com.account.accountmaker.request.CreateAccountRequest;
 import com.account.accountmaker.service.AccountService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
@@ -24,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
+@DirtiesContext
 public class CustomerControllerTests {
     private static final String CUSTOMER_ENDPOINT = "/v1/customer";
     private static final String ACCOUNT_ENDPOINT = "/v1/account";
