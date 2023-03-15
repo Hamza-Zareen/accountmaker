@@ -15,7 +15,7 @@ This project was generated with SpringBoot Initializer. To create accounts for a
 | ------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | Tools         | Intellij, Postman, Visualstudio Code, Github                                                                             |
 | Languages     | Java, javaScript, Shell                                                                                                  |
-| Technologies  | Spring, Spring Boot, Spring Batch, Spring Data JPA, Junit, H2, Docker, ReactJs, Swagger, RestAPI                         |
+| Technologies  | Spring, Spring Boot, Spring Batch, Spring Data JPA, Junit, H2, Docker, ReactJs, Swagger, RestAPI, Github Actions         |
 
 ## Getting Started
 
@@ -43,4 +43,8 @@ After running this you'll be able to hit the API's on the Endpoints mentioned. H
 ## Swagger-UI
 ![image](https://user-images.githubusercontent.com/54959355/225382779-b403210e-3abb-4b79-a28a-887d86f0b155.png)
 
+## Github Actions
+
+	Added github Actions to ensure the successfull integration of the system.
+![image](https://user-images.githubusercontent.com/54959355/225385022-433e2b25-969a-4528-b9a4-33bc86c39832.png)
 
