@@ -27,21 +27,6 @@ public class SecurityController {
     @Autowired
     private JwtUtil jwtUtil;
 
-    @GetMapping("/")
-    public String home(){
-        return ("<h1>Welcome home</h1>");
-    }
-
-    @GetMapping("/user")
-    public String user(){
-        return ("<h1>Welcome User</h1>");
-    }
-
-    @GetMapping("/admin")
-    public String admin(){
-        return ("<h1>Welcome Admin</h1>");
-    }
-
     @PostMapping("/authentication")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
         try {
