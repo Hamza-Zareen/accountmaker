@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -53,7 +54,8 @@ public class CustomerControllerTests {
     @Test
     public void testGetCustomer() throws Exception {
         this.mockMvc.perform(get(CUSTOMER_ENDPOINT)
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.user("user")))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.restAPIResponseStatus", is("Success")))
@@ -65,7 +67,8 @@ public class CustomerControllerTests {
     @Test
     public void testGetCustomerById() throws Exception {
         this.mockMvc.perform(get(CUSTOMER_ENDPOINT + "/1")
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.user("user")))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.restAPIResponseStatus", is("Success")))
@@ -83,7 +86,8 @@ public class CustomerControllerTests {
         createAccount(request);
 
         this.mockMvc.perform(get(CUSTOMER_ENDPOINT + "/1")
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(SecurityMockMvcRequestPostProcessors.user("user")))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.restAPIResponseStatus", is("Success")))
@@ -99,7 +103,8 @@ public class CustomerControllerTests {
     private void createAccount(CreateAccountRequest request) throws Exception {
         this.mockMvc.perform(post(ACCOUNT_ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writer().withDefaultPrettyPrinter().writeValueAsString(request)));
+                .content(mapper.writer().withDefaultPrettyPrinter().writeValueAsString(request))
+                .with(SecurityMockMvcRequestPostProcessors.user("user")));
     }
 
     private CreateAccountRequest getCreateAccountRequest(Long id, BigDecimal initialCredit) {

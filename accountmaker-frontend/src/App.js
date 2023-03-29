@@ -2,12 +2,31 @@ import logo from './logo.svg';
 import './App.css';
 import { useFetchCustomerData } from './hooks/useFetchCustomerData';
 import { useState } from 'react';
+import { useEffect } from 'react';
 
 
 
 function App() {
+  useEffect(() => {
+    const auth = fetch("http://localhost:8080/authentication", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: "user",
+        password: "pass"
+     })
+    }).then(resp => {
+             console.log(resp);
+             return resp.json();
+        }).then(data => {
+          console.log(data);
+          localStorage.setItem('dataKey', JSON.stringify(data.jwt));
+          return data;
+        });
+  })
+  
   const { data, isFetching } = useFetchCustomerData(
-    `http://localhost:8080/v1/customer`
+    `http://localhost:8080/v1/customer`, localStorage.getItem('dataKey').replaceAll("\"","")
   );
   const [value, setValue] = useState('');
   const [dropDownValue, setDropDownValue] = useState('');
@@ -21,9 +40,14 @@ function App() {
   async function onSubmitHandler(e){
     e.preventDefault()
     try{
+      const token = localStorage.getItem('dataKey').replaceAll("\"","")
       const res = await fetch("http://localhost:8080/v1/account", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "http://localhost:8080",
+        'Access-Control-Allow-Credentials': 'true',
+            Authorization: `Bearer ${token}`
+          },
         body: JSON.stringify({
           initialCredit: value,
           customerId: dropDownValue
