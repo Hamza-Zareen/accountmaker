@@ -1,6 +1,7 @@
 package com.account.accountmaker.data;
 
 import com.account.accountmaker.model.Customer;
+import com.account.accountmaker.model.User;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -22,8 +23,10 @@ import javax.sql.DataSource;
 
 @Configuration
 public class BatchConfiguration {
+
+
     @Bean
-    public FlatFileItemReader<CustomerInput> reader() {
+    public FlatFileItemReader<CustomerInput> customerInputFlatFileItemReader() {
         return new FlatFileItemReaderBuilder<CustomerInput>()
                 .name("CustomerInputItemReader")
                 .resource(new ClassPathResource("customers.csv"))
@@ -36,12 +39,12 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public CustomerItemProcessor processor() {
+    public CustomerItemProcessor customerItemProcessor() {
         return new CustomerItemProcessor();
     }
 
     @Bean
-    public JdbcBatchItemWriter<Customer> writer(DataSource dataSource) {
+    public JdbcBatchItemWriter<Customer> customerJdbcBatchItemWriter(DataSource dataSource) {
         return new JdbcBatchItemWriterBuilder<Customer>()
                 .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
                 .sql("INSERT INTO customer (customer_id, name, surname) VALUES (:customerId, :name, :surname)")
@@ -50,24 +53,63 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public Job importUserJob(JobRepository jobRepository,
-                             JobCompletionNotificationListener listener, Step step1) {
-        return new JobBuilder("importUserJob", jobRepository)
-                .incrementer(new RunIdIncrementer())
-                .listener(listener)
-                .flow(step1)
-                .end()
+    public Step step1(JobRepository jobRepository,
+                      PlatformTransactionManager transactionManager, JdbcBatchItemWriter<Customer> customerJdbcBatchItemWriter) {
+        return new StepBuilder("step1", jobRepository)
+                .<CustomerInput, Customer> chunk(10, transactionManager)
+                .reader(customerInputFlatFileItemReader())
+                .processor(customerItemProcessor())
+                .writer(customerJdbcBatchItemWriter)
                 .build();
     }
 
     @Bean
-    public Step step1(JobRepository jobRepository,
-                      PlatformTransactionManager transactionManager, JdbcBatchItemWriter<Customer> writer) {
-        return new StepBuilder("step1", jobRepository)
-                .<CustomerInput, Customer> chunk(10, transactionManager)
-                .reader(reader())
-                .processor(processor())
-                .writer(writer)
+    public FlatFileItemReader<UserInput> userInputFlatFileItemReader() {
+        return new FlatFileItemReaderBuilder<UserInput>()
+                .name("UserInputItemReader")
+                .resource(new ClassPathResource("user.csv"))
+                .delimited()
+                .names(new String[]{"id", "active", "password", "roles", "user_name"})
+                .fieldSetMapper(new BeanWrapperFieldSetMapper<>() {{
+                    setTargetType(UserInput.class);
+                }})
+                .build();
+    }
+
+    @Bean
+    public UserItemProcessor userItemProcessor() {
+        return new UserItemProcessor();
+    }
+
+    @Bean
+    public JdbcBatchItemWriter<User> userJdbcBatchItemWriter(DataSource dataSource) {
+        return new JdbcBatchItemWriterBuilder<User>()
+                .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
+                .sql("INSERT INTO myuser (id, active, password, roles, user_name) VALUES (:id, :active, :password, :roles, :userName)")
+                .dataSource(dataSource)
+                .build();
+    }
+    @Bean
+    public Step step2(JobRepository jobRepository,
+                      PlatformTransactionManager transactionManager, JdbcBatchItemWriter<User> userJdbcBatchItemWriter) {
+        return new StepBuilder("step2", jobRepository)
+                .<UserInput, User> chunk(10, transactionManager)
+                .reader(userInputFlatFileItemReader())
+                .processor(userItemProcessor())
+                .writer(userJdbcBatchItemWriter)
+                .build();
+    }
+
+
+    @Bean
+    public Job importCustomerJob(JobRepository jobRepository,
+                             JobCompletionNotificationListener listener, Step step1,Step step2) {
+        return new JobBuilder("importCustomerJob", jobRepository)
+                .incrementer(new RunIdIncrementer())
+                .listener(listener)
+                .flow(step1)
+                .next(step2)
+                .end()
                 .build();
     }
 }

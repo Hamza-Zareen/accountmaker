@@ -7,6 +7,7 @@ import com.account.accountmaker.request.CreateAccountRequest;
 import com.account.accountmaker.service.AccountService;
 import com.account.accountmaker.service.CustomerService;
 import com.account.accountmaker.util.Util;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
