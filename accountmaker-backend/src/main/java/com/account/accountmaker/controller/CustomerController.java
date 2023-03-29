@@ -19,7 +19,6 @@ import java.util.Set;
 
 @CrossOrigin
 @RestController
-@SecurityRequirement(name = "bearerAuth")
 @RequestMapping("/v1/customer")
 public class CustomerController {
     private static final Logger log = LoggerFactory.getLogger(AccountController.class);
