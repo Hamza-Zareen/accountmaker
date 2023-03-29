@@ -4,7 +4,6 @@ import com.account.accountmaker.model.Account;
 import com.account.accountmaker.model.Customer;
 import com.account.accountmaker.repository.AccountRepository;
 import com.account.accountmaker.request.CreateAccountRequest;
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +15,6 @@ import java.util.HashSet;
 @Service
 public class AccountService {
     private static final Logger log = LoggerFactory.getLogger(AccountService.class);
-
-    @Autowired
-    ModelMapper modelMapper;
 
     private AccountRepository accountRepository;
 
