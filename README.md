@@ -34,13 +34,23 @@ this will run the frontend container and the backend container on Docker. As sho
 After running this you'll be able to hit the API's on the Endpoints mentioned. Here's some sample snippets for reference.
 
 ## Frontend
+To hit the API's from frontend no extra steps needed for now. As a default user is been setup to interact with the Application.
 ![image](https://user-images.githubusercontent.com/54959355/225382035-bf45a1b6-3f72-4ae6-b2ea-f9e8e8eb5a5d.png)
 
 ## Backend
+For Backend you need to generate the Token by calling this endPoint from Postman. http://localhost:8080/authentication
+with default user name and password. Then use the Generated token as Autherization Header for other Requests.
+![image](https://user-images.githubusercontent.com/54959355/228573551-11beb3c2-6d1d-4f50-993c-ff4b072c266e.png)
+
 ![image](https://user-images.githubusercontent.com/54959355/225382468-521d350c-21ad-4e28-986a-49482fe44c9b.png)
-![image](https://user-images.githubusercontent.com/54959355/225382618-a2c49872-eac3-489d-9b14-b70133e76846.png)
+![image](https://user-images.githubusercontent.com/54959355/228573965-2ce86acb-cfc8-4ce5-b33a-e8213bde8b91.png)
 
 ## Swagger-UI
+### For Swagger-UI you need to generate the token using the post call for authentication.
+![image](https://user-images.githubusercontent.com/54959355/228574709-ecdf0cd1-cebd-43e1-b708-6cb3b965ea6c.png)
+### After token generation put the token in the Authorization in Swagger-UI page without Bearer 
+![image](https://user-images.githubusercontent.com/54959355/228575084-cc361209-a6b2-4632-988e-159edce3078d.png)
+
 ![image](https://user-images.githubusercontent.com/54959355/225382779-b403210e-3abb-4b79-a28a-887d86f0b155.png)
 
 ## Github Actions
