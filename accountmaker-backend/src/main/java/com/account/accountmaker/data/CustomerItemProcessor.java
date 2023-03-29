@@ -16,11 +16,11 @@ public class CustomerItemProcessor implements ItemProcessor<CustomerInput, Custo
     final String surname = customerInput.getSurname().toUpperCase();
     final long customerId = customerInput.getCustomerId();
 
-    final Customer transformedPerson = new Customer(customerId , name, surname);
+    final Customer transformedCustomer = new Customer(customerId , name, surname);
 
-    log.info("Converting (" + customerInput + ") into (" + transformedPerson + ")");
+    log.info("Converting (" + customerInput + ") into (" + transformedCustomer + ")");
 
-    return transformedPerson;
+    return transformedCustomer;
   }
 
 }
